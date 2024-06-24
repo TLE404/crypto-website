@@ -6,6 +6,7 @@ const options = {
 };
 
 let coins = [];
+let currentPage = 1; // Track current page globally
 
 // Function to fetch coins from API
 const fetchCoins = async () => {
@@ -29,10 +30,9 @@ const saveFavorites = (favorites) => {
 };
 
 // Function to render coins on the page
-const renderCoins = (coins, page = 1, itemsPerPage = 15) => {
-    const start = (page - 1) * itemsPerPage;
-    const end = page * itemsPerPage;
-    const coinsToDisplay = coins.slice(start, end);
+const renderCoins = (coinsToDisplay, page, itemsPerPage) => {
+    const start = (page - 1) * itemsPerPage + 1; // Calculate starting rank
+    const end = start + itemsPerPage - 1; // Calculate ending rank
     const favorites = getFavorites();
     const tableBody = document.querySelector('#crypto-table tbody');
     tableBody.innerHTML = '';
@@ -41,7 +41,7 @@ const renderCoins = (coins, page = 1, itemsPerPage = 15) => {
         const isFavorite = favorites.includes(coin.id);
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${start + index + 1}</td>
+            <td>${start + index}</td>
             <td><img src="${coin.image}" alt="${coin.name}" width="24" height="24" /></td>
             <td>${coin.name}</td>
             <td>$${coin.current_price.toLocaleString()}</td>
@@ -87,12 +87,13 @@ const renderPagination = (coins, itemsPerPage) => {
         const pageButton = document.createElement('button');
         pageButton.textContent = i;
         pageButton.classList.add('page-button');
-        if (i === 1) {
+        if (i === currentPage) {
             pageButton.classList.add('active');
         }
         pageButton.addEventListener('click', () => {
-            renderCoins(coins, i, itemsPerPage);
-            updatePaginationButtons(i);
+            currentPage = i; // Update current page globally
+            renderCoins(getCoinsForPage(coins, currentPage, itemsPerPage), currentPage, itemsPerPage);
+            updatePaginationButtons();
         });
         paginationContainer.appendChild(pageButton);
     }
@@ -103,9 +104,28 @@ const filterCoins = (searchTerm) => {
     return coins.filter(coin => coin.name.toLowerCase().includes(searchTerm.toLowerCase()));
 };
 
+// Function to get coins for a specific page
+const getCoinsForPage = (coins, page, itemsPerPage) => {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return coins.slice(start, end);
+};
+
+// Function to update pagination button states
+const updatePaginationButtons = () => {
+    const pageButtons = document.querySelectorAll('.page-button');
+    pageButtons.forEach((button, index) => {
+        if (index + 1 === currentPage) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     coins = await fetchCoins();
-    renderCoins(coins, 1, 15); // Initial render with 15 coins per page
+    renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15); // Initial render with 15 coins per page
     renderPagination(coins, 15); // Initial pagination setup for 15 coins per page
 
     const searchBox = document.querySelector('#search-box');
@@ -118,13 +138,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         debounceTimeout = setTimeout(() => {
             const searchTerm = searchBox.value.trim();
             const filteredCoins = filterCoins(searchTerm);
-            renderCoins(filteredCoins, 1, 15); // Render filtered coins with 15 coins per page
+            currentPage = 1; // Reset to first page when searching
+            renderCoins(getCoinsForPage(filteredCoins, currentPage, 15), currentPage, 15); // Render filtered coins with 15 coins per page
             renderPagination(filteredCoins, 15); // Update pagination for filtered coins
         }, 300); // Adjust debounce time as needed
     };
 
     searchBox.addEventListener('input', handleSearch);
-
     searchIcon.addEventListener('click', handleSearch);
 
     const sortPriceAsc = document.querySelector('#sort-price-asc');
@@ -139,6 +159,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (order === 'desc') {
             coins.sort((a, b) => b.current_price - a.current_price);
         }
+        currentPage = 1; // Reset to first page after sorting
+        renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15);
+        renderPagination(coins, 15);
     };
 
     // Function to sort coins by volume
@@ -148,33 +171,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (order === 'desc') {
             coins.sort((a, b) => b.total_volume - a.total_volume);
         }
+        currentPage = 1; // Reset to first page after sorting
+        renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15);
+        renderPagination(coins, 15);
     };
 
     // Sorting by price ascending
     sortPriceAsc.addEventListener('click', () => {
         sortCoinsByPrice('asc');
-        renderCoins(coins, 1, 15);
-        renderPagination(coins, 15);
     });
 
     // Sorting by price descending
     sortPriceDesc.addEventListener('click', () => {
         sortCoinsByPrice('desc');
-        renderCoins(coins, 1, 15);
-        renderPagination(coins, 15);
     });
 
     // Sorting by volume ascending
     sortVolumeAsc.addEventListener('click', () => {
         sortCoinsByVolume('asc');
-        renderCoins(coins, 1, 15);
-        renderPagination(coins, 15);
     });
 
     // Sorting by volume descending
     sortVolumeDesc.addEventListener('click', () => {
         sortCoinsByVolume('desc');
-        renderCoins(coins, 1, 15);
-        renderPagination(coins, 15);
     });
 });

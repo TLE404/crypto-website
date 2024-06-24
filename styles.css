@@ -1,89 +1,127 @@
 /* styles.css */
+
 body {
     font-family: Arial, sans-serif;
-  }
-  
-  nav {
+    margin: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure full viewport height */
+}
+
+nav {
     background-color: #333;
     padding: 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  nav a {
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+    position: relative; /* Ensure relative positioning for children */
+}
+
+.nav-link {
     color: white;
     text-decoration: none;
     margin-right: 1em;
-  }
-  
-  nav a:hover {
+    background-color: rgb(238, 188, 29); /* Yellow background color */
+    padding: 8px 12px;
+    border-radius: 5px; /* Rounded corners */
+}
+
+.nav-link:hover {
     text-decoration: underline;
-  }
-  
-  .search-container {
+}
+
+.left-nav {
     display: flex;
     align-items: center;
-  }
-  
-  #search-box {
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+#search-box {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 5px;
-  }
-  
-  #search-icon {
+}
+
+#search-icon {
     color: white;
     cursor: pointer;
-  }
-  
-  table {
+}
+
+.right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    color: rgb(238, 188, 29); /* Yellow text color */
+    margin-left: auto; /* Push to the right */
+    text-decoration: none;
+}
+
+main {
+    flex: 1; /* Ensure main content takes up remaining space */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+}
+
+table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-  }
-  
-  th, td {
+}
+
+th,
+td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
-  }
-  
-  th {
+}
+
+th {
     background-color: #f4f4f4;
-  }
-  
-  tr:hover {
+}
+
+tr:hover {
     background-color: #f1f1f1;
     cursor: pointer;
-  }
-  
-  .pagination {
+}
+
+.pagination {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .page-button {
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: auto; /* Push to the bottom */
+    margin-bottom: 20px; /* Ensure some space from the content */
+    
+}
+
+.page-button {
     margin: 0 5px;
     padding: 5px 10px;
     border: 1px solid #ccc;
     background-color: white;
     cursor: pointer;
-  }
-  
-  .page-button.active {
+}
+
+.page-button.active {
     background-color: #4caf50;
     color: white;
-  }
-  
-  .favorite-icon {
+}
+
+.favorite-icon {
     cursor: pointer;
-  }
-  
-  .favorite-icon:hover,
-  .favorite-icon.favorite {
+}
+
+.favorite-icon:hover,
+.favorite-icon.favorite {
     color: gold;
-  }
-  
+}

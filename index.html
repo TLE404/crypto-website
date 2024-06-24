@@ -9,16 +9,20 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">Home</a>
-    <a href="favorites.html">Liked Coins</a>
-    <div class="search-container">
-      <input type="text" id="search-box" placeholder="Search...">
-      <i class="fas fa-search" id="search-icon"></i>
-    </div>
+        <div class="left-nav">
+            <a href="index.html" class="title">Crypto Tracker</a>
+        </div>
+        <div class="right-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="favorites.html" class="nav-link">Liked Coins</a>
+            <div class="search-container">
+                <input type="text" id="search-box" placeholder="Search...">
+                <i class="fas fa-search" id="search-icon"></i>
+            </div>
+        </div>
+        
     </nav>
     <main>
-        <!-- <input type="text" id="search-box" placeholder="Search coins...">
-        <i id="search-icon" class="fas fa-search"></i> -->
         <table id="crypto-table">
             <thead>
                 <tr>
@@ -46,5 +50,3 @@
     <script src="app.js"></script>
 </body>
 </html>
-
-
