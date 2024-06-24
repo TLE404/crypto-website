@@ -29,9 +29,9 @@ const saveFavorites = (favorites) => {
 };
 
 // Function to render coins on the page
-const renderCoins = (coins, page = 1) => {
-    const start = (page - 1) * 10;
-    const end = page * 10;
+const renderCoins = (coins, page = 1, itemsPerPage = 15) => {
+    const start = (page - 1) * itemsPerPage;
+    const end = page * itemsPerPage;
     const coinsToDisplay = coins.slice(start, end);
     const favorites = getFavorites();
     const tableBody = document.querySelector('#crypto-table tbody');
@@ -78,7 +78,8 @@ const renderCoins = (coins, page = 1) => {
 };
 
 // Function to render pagination buttons
-const renderPagination = (coins, totalPages, currentPage) => {
+const renderPagination = (coins, itemsPerPage) => {
+    const totalPages = Math.ceil(coins.length / itemsPerPage);
     const paginationContainer = document.querySelector('#pagination');
     paginationContainer.innerHTML = '';
 
@@ -86,12 +87,12 @@ const renderPagination = (coins, totalPages, currentPage) => {
         const pageButton = document.createElement('button');
         pageButton.textContent = i;
         pageButton.classList.add('page-button');
-        if (i === currentPage) {
+        if (i === 1) {
             pageButton.classList.add('active');
         }
         pageButton.addEventListener('click', () => {
-            renderCoins(coins, i);
-            renderPagination(coins, totalPages, i);
+            renderCoins(coins, i, itemsPerPage);
+            updatePaginationButtons(i);
         });
         paginationContainer.appendChild(pageButton);
     }
@@ -104,8 +105,8 @@ const filterCoins = (searchTerm) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     coins = await fetchCoins();
-    renderCoins(coins, 1);
-    renderPagination(coins, Math.ceil(coins.length / 10), 1);
+    renderCoins(coins, 1, 15); // Initial render with 15 coins per page
+    renderPagination(coins, 15); // Initial pagination setup for 15 coins per page
 
     const searchBox = document.querySelector('#search-box');
     const searchIcon = document.querySelector('#search-icon');
@@ -117,8 +118,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         debounceTimeout = setTimeout(() => {
             const searchTerm = searchBox.value.trim();
             const filteredCoins = filterCoins(searchTerm);
-            renderCoins(filteredCoins, 1);
-            renderPagination(filteredCoins, Math.ceil(filteredCoins.length / 10), 1);
+            renderCoins(filteredCoins, 1, 15); // Render filtered coins with 15 coins per page
+            renderPagination(filteredCoins, 15); // Update pagination for filtered coins
         }, 300); // Adjust debounce time as needed
     };
 
@@ -152,29 +153,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Sorting by price ascending
     sortPriceAsc.addEventListener('click', () => {
         sortCoinsByPrice('asc');
-        renderCoins(coins, 1);
-        renderPagination(coins, Math.ceil(coins.length / 10), 1);
+        renderCoins(coins, 1, 15);
+        renderPagination(coins, 15);
     });
 
     // Sorting by price descending
     sortPriceDesc.addEventListener('click', () => {
         sortCoinsByPrice('desc');
-        renderCoins(coins, 1);
-        renderPagination(coins, Math.ceil(coins.length / 10), 1);
+        renderCoins(coins, 1, 15);
+        renderPagination(coins, 15);
     });
 
     // Sorting by volume ascending
     sortVolumeAsc.addEventListener('click', () => {
         sortCoinsByVolume('asc');
-        renderCoins(coins, 1);
-        renderPagination(coins, Math.ceil(coins.length / 10), 1);
+        renderCoins(coins, 1, 15);
+        renderPagination(coins, 15);
     });
 
     // Sorting by volume descending
     sortVolumeDesc.addEventListener('click', () => {
         sortCoinsByVolume('desc');
-        renderCoins(coins, 1);
-        renderPagination(coins, Math.ceil(coins.length / 10), 1);
+        renderCoins(coins, 1, 15);
+        renderPagination(coins, 15);
     });
 });
-
