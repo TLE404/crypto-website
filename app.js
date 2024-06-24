@@ -11,11 +11,14 @@ let currentPage = 1; // Track current page globally
 // Function to fetch coins from API
 const fetchCoins = async () => {
     try {
+        showShimmer(); // Show shimmer effect before fetching data
         const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1', options);
         coins = await response.json();
+        hideShimmer(); // Hide shimmer effect after data is fetched
         return coins;
     } catch (err) {
         console.error(err);
+        hideShimmer(); // Ensure shimmer is hidden in case of an error
     }
 };
 
@@ -27,6 +30,18 @@ const getFavorites = () => {
 // Function to save favorites to localStorage
 const saveFavorites = (favorites) => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
+};
+
+// Function to handle favorite icon click
+const handleFavoriteClick = (coinId) => {
+    let favorites = getFavorites();
+    if (favorites.includes(coinId)) {
+        favorites = favorites.filter(id => id !== coinId);
+    } else {
+        favorites.push(coinId);
+    }
+    saveFavorites(favorites);
+    renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15);
 };
 
 // Function to render coins on the page
@@ -56,25 +71,15 @@ const renderCoins = (coinsToDisplay, page, itemsPerPage) => {
                 window.location.href = `coin.html?id=${coin.id}`;
             }
         });
+        row.querySelector('.favorite-icon').addEventListener('click', (event) => {
+            event.stopPropagation();
+            handleFavoriteClick(coin.id);
+        });
         tableBody.appendChild(row);
     });
 
-    const favoriteIcons = document.querySelectorAll('.favorite-icon');
-    favoriteIcons.forEach(icon => {
-        icon.addEventListener('click', (event) => {
-            event.stopPropagation();
-            const coinId = event.target.getAttribute('data-id');
-            const favorites = getFavorites();
-            if (favorites.includes(coinId)) {
-                saveFavorites(favorites.filter(id => id !== coinId));
-                event.target.classList.remove('favorite');
-            } else {
-                favorites.push(coinId);
-                saveFavorites(favorites);
-                event.target.classList.add('favorite');
-            }
-        });
-    });
+    // Hide shimmer effect after rendering coins
+    hideShimmer();
 };
 
 // Function to render pagination buttons
@@ -92,8 +97,11 @@ const renderPagination = (coins, itemsPerPage) => {
         }
         pageButton.addEventListener('click', () => {
             currentPage = i; // Update current page globally
-            renderCoins(getCoinsForPage(coins, currentPage, itemsPerPage), currentPage, itemsPerPage);
-            updatePaginationButtons();
+            showShimmer(); // Show shimmer effect before rendering new page
+            setTimeout(() => {
+                renderCoins(getCoinsForPage(coins, currentPage, itemsPerPage), currentPage, itemsPerPage);
+                updatePaginationButtons();
+            }, 500); // Simulate delay for demo purposes
         });
         paginationContainer.appendChild(pageButton);
     }
@@ -123,10 +131,32 @@ const updatePaginationButtons = () => {
     });
 };
 
+// Function to show shimmer effect
+const showShimmer = () => {
+    const shimmerContainer = document.querySelector('.shimmer-container');
+    shimmerContainer.style.display = 'flex';
+};
+
+// Function to hide shimmer effect
+const hideShimmer = () => {
+    const shimmerContainer = document.querySelector('.shimmer-container');
+    shimmerContainer.style.display = 'none';
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
+    const shimmerContainer = document.querySelector('.shimmer-container');
+
+    // Show shimmer effect initially
+    showShimmer();
+
+    // Fetch coins from API
     coins = await fetchCoins();
-    renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15); // Initial render with 15 coins per page
-    renderPagination(coins, 15); // Initial pagination setup for 15 coins per page
+
+    // Simulate delay for initial render
+    setTimeout(() => {
+        renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15); // Initial render with 15 coins per page
+        renderPagination(coins, 15); // Initial pagination setup for 15 coins per page
+    }, 1000); // Simulate delay for demo purposes
 
     const searchBox = document.querySelector('#search-box');
     const searchIcon = document.querySelector('#search-icon');
@@ -139,8 +169,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const searchTerm = searchBox.value.trim();
             const filteredCoins = filterCoins(searchTerm);
             currentPage = 1; // Reset to first page when searching
-            renderCoins(getCoinsForPage(filteredCoins, currentPage, 15), currentPage, 15); // Render filtered coins with 15 coins per page
-            renderPagination(filteredCoins, 15); // Update pagination for filtered coins
+            showShimmer(); // Show shimmer effect before rendering filtered coins
+            setTimeout(() => {
+                renderCoins(getCoinsForPage(filteredCoins, currentPage, 15), currentPage, 15); // Render filtered coins with 15 coins per page
+                renderPagination(filteredCoins, 15); // Update pagination for filtered coins
+            }, 500); // Simulate delay for demo purposes
         }, 300); // Adjust debounce time as needed
     };
 
@@ -160,8 +193,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             coins.sort((a, b) => b.current_price - a.current_price);
         }
         currentPage = 1; // Reset to first page after sorting
-        renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15);
-        renderPagination(coins, 15);
+        showShimmer(); // Show shimmer effect before rendering sorted coins
+        setTimeout(() => {
+            renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15);
+            renderPagination(coins, 15);
+        }, 500); // Simulate delay for demo purposes
     };
 
     // Function to sort coins by volume
@@ -172,8 +208,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             coins.sort((a, b) => b.total_volume - a.total_volume);
         }
         currentPage = 1; // Reset to first page after sorting
-        renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15);
-        renderPagination(coins, 15);
+        showShimmer(); // Show shimmer effect before rendering sorted coins
+        setTimeout(() => {
+            renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15);
+            renderPagination(coins, 15);
+        }, 500); // Simulate delay for demo purposes
     };
 
     // Sorting by price ascending
@@ -195,4 +234,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     sortVolumeDesc.addEventListener('click', () => {
         sortCoinsByVolume('desc');
     });
+
+    // Function to initialize the page
+    const initializePage = async () => {
+        showShimmer(); // Show shimmer effect initially
+        coins = await fetchCoins(); // Fetch coins from API
+        setTimeout(() => {
+            renderCoins(getCoinsForPage(coins, currentPage, 15), currentPage, 15); // Initial render with 15 coins per page
+            renderPagination(coins, 15); // Initial pagination setup for 15 coins per page
+        }, 1000); // Simulate delay for demo purposes
+    };
+
+    // Initialize the page
+    initializePage();
 });

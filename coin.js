@@ -1,3 +1,5 @@
+// coin.js
+
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const coinId = urlParams.get('id');
@@ -7,6 +9,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         headers: { accept: 'application/json', 'x-cg-demo-api-key': apiKey }
     };
 
+    const coinContainer = document.getElementById('coin-container');
+    const shimmerContainer = document.querySelector('.shimmer-container');
+
     const coinImage = document.getElementById('coin-image');
     const coinName = document.getElementById('coin-name');
     const coinDescription = document.getElementById('coin-description');
@@ -14,13 +19,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     const coinPrice = document.getElementById('coin-price');
     const coinMarketCap = document.getElementById('coin-market-cap');
 
+    const showShimmer = () => {
+        shimmerContainer.style.display = 'flex';
+        coinContainer.style.display = 'none';
+    };
+
+    const hideShimmer = () => {
+        shimmerContainer.style.display = 'none';
+        coinContainer.style.display = 'flex';
+    };
+
     async function fetchCoinData() {
+        showShimmer(); // Show shimmer effect before fetching data
         try {
             const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`, options);
             const data = await response.json();
             displayCoinData(data);
         } catch (error) {
             console.error('Error fetching data:', error);
+        } finally {
+            hideShimmer(); // Hide shimmer effect after data is fetched
         }
     }
 
