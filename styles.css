@@ -1,0 +1,89 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  nav {
+    background-color: #333;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 1em;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  
+  .search-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  #search-box {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 5px;
+  }
+  
+  #search-icon {
+    color: white;
+    cursor: pointer;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .page-button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+  }
+  
+  .page-button.active {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .favorite-icon {
+    cursor: pointer;
+  }
+  
+  .favorite-icon:hover,
+  .favorite-icon.favorite {
+    color: gold;
+  }
+  

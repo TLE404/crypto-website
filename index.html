@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+    <a href="favorites.html">Liked Coins</a>
+    <div class="search-container">
+      <input type="text" id="search-box" placeholder="Search...">
+      <i class="fas fa-search" id="search-icon"></i>
+    </div>
+    </nav>
+    <main>
+        <!-- <input type="text" id="search-box" placeholder="Search coins...">
+        <i id="search-icon" class="fas fa-search"></i> -->
+        <table id="crypto-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Icon</th>
+                    <th>Name</th>
+                    <th>Price
+                        <i id="sort-price-asc" class="fas fa-arrow-up"></i>
+                        <i id="sort-price-desc" class="fas fa-arrow-down"></i>
+                    </th>
+                    <th>Volume
+                        <i id="sort-volume-asc" class="fas fa-arrow-up"></i>
+                        <i id="sort-volume-desc" class="fas fa-arrow-down"></i>
+                    </th>
+                    <th>Market Cap</th>
+                    <th>Favorite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table content will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        <div id="pagination"></div>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+<!-- index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cryptocurrency Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="favorites.html">Liked Coins</a>
+    <div class="search-container">
+      <input type="text" id="search-box" placeholder="Search...">
+      <i class="fas fa-search" id="search-icon"></i>
+    </div>
+  </nav>
+  <h1>Cryptocurrency Tracker</h1>
+  <table id="crypto-table">
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Icon</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>24h Volume</th>
+        <th>Market Cap</th>
+        <th>Favorite</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Coin rows will be inserted here by JavaScript -->
+    </tbody>
+  </table>
+  <div id="pagination" class="pagination"></div>
+  <script src="app.js"></script>
+</body>
+</html> -->
